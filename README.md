@@ -129,51 +129,235 @@ You can add more tests in `tests/test_recommender.py`.
 
 ## Sample Recommendation Output
 
-Profile used: `genre=indie pop | mood=happy | target_energy=0.75`
+Three standard profiles and three adversarial edge-case profiles were run against the 18-song catalog.
+
+### Standard Profile 1 — High-Energy Pop
 
 ```
-========================================================
-  TOP 5 RECOMMENDATIONS
-  Profile: genre=indie pop | mood=happy | energy=0.75
-========================================================
+==============================================================
+  PROFILE: High-Energy Pop
+  genre=pop | mood=happy | energy=0.9
+==============================================================
+
+  #1  Sunrise City  -  Neon Echo
+       Genre: pop  |  Mood: happy  |  Energy: 0.82
+       Score: 3.92 / 4.00
+       Why:   genre match (pop, +2.0); mood match (happy, +1.0); energy proximity +0.92 (target 0.90, song 0.82)
+
+  #2  Gym Hero  -  Max Pulse
+       Genre: pop  |  Mood: intense  |  Energy: 0.93
+       Score: 2.97 / 4.00
+       Why:   genre match (pop, +2.0); energy proximity +0.97 (target 0.90, song 0.93)
+
+  #3  Rooftop Lights  -  Indigo Parade
+       Genre: indie pop  |  Mood: happy  |  Energy: 0.76
+       Score: 1.86 / 4.00
+       Why:   mood match (happy, +1.0); energy proximity +0.86 (target 0.90, song 0.76)
+
+  #4  Storm Runner  -  Voltline
+       Genre: rock  |  Mood: intense  |  Energy: 0.91
+       Score: 0.99 / 4.00
+       Why:   energy proximity +0.99 (target 0.90, song 0.91)
+
+  #5  Pulse at Dawn  -  Echosphere
+       Genre: edm  |  Mood: euphoric  |  Energy: 0.95
+       Score: 0.95 / 4.00
+       Why:   energy proximity +0.95 (target 0.90, song 0.95)
+
+==============================================================
+```
+
+### Standard Profile 2 — Chill Lofi
+
+```
+==============================================================
+  PROFILE: Chill Lofi
+  genre=lofi | mood=chill | energy=0.4
+==============================================================
+
+  #1  Midnight Coding  -  LoRoom
+       Genre: lofi  |  Mood: chill  |  Energy: 0.42
+       Score: 3.98 / 4.00
+       Why:   genre match (lofi, +2.0); mood match (chill, +1.0); energy proximity +0.98 (target 0.40, song 0.42)
+
+  #2  Library Rain  -  Paper Lanterns
+       Genre: lofi  |  Mood: chill  |  Energy: 0.35
+       Score: 3.95 / 4.00
+       Why:   genre match (lofi, +2.0); mood match (chill, +1.0); energy proximity +0.95 (target 0.40, song 0.35)
+
+  #3  Focus Flow  -  LoRoom
+       Genre: lofi  |  Mood: focused  |  Energy: 0.40
+       Score: 3.00 / 4.00
+       Why:   genre match (lofi, +2.0); energy proximity +1.00 (target 0.40, song 0.40)
+
+  #4  Spacewalk Thoughts  -  Orbit Bloom
+       Genre: ambient  |  Mood: chill  |  Energy: 0.28
+       Score: 1.88 / 4.00
+       Why:   mood match (chill, +1.0); energy proximity +0.88 (target 0.40, song 0.28)
+
+  #5  Coffee Shop Stories  -  Slow Stereo
+       Genre: jazz  |  Mood: relaxed  |  Energy: 0.37
+       Score: 0.97 / 4.00
+       Why:   energy proximity +0.97 (target 0.40, song 0.37)
+
+==============================================================
+```
+
+### Standard Profile 3 — Deep Intense Rock
+
+```
+==============================================================
+  PROFILE: Deep Intense Rock
+  genre=rock | mood=intense | energy=0.92
+==============================================================
+
+  #1  Storm Runner  -  Voltline
+       Genre: rock  |  Mood: intense  |  Energy: 0.91
+       Score: 3.99 / 4.00
+       Why:   genre match (rock, +2.0); mood match (intense, +1.0); energy proximity +0.99 (target 0.92, song 0.91)
+
+  #2  Gym Hero  -  Max Pulse
+       Genre: pop  |  Mood: intense  |  Energy: 0.93
+       Score: 1.99 / 4.00
+       Why:   mood match (intense, +1.0); energy proximity +0.99 (target 0.92, song 0.93)
+
+  #3  Pulse at Dawn  -  Echosphere
+       Genre: edm  |  Mood: euphoric  |  Energy: 0.95
+       Score: 0.97 / 4.00
+       Why:   energy proximity +0.97 (target 0.92, song 0.95)
+
+  #4  Shatter the Grid  -  Iron Veil
+       Genre: metal  |  Mood: angry  |  Energy: 0.97
+       Score: 0.95 / 4.00
+       Why:   energy proximity +0.95 (target 0.92, song 0.97)
+
+  #5  Sunrise City  -  Neon Echo
+       Genre: pop  |  Mood: happy  |  Energy: 0.82
+       Score: 0.90 / 4.00
+       Why:   energy proximity +0.90 (target 0.92, song 0.82)
+
+==============================================================
+```
+
+### Adversarial Profile 1 — Conflicting preferences (high energy + melancholic mood)
+
+```
+==============================================================
+  PROFILE: ADVERSARIAL: Conflict (high energy + melancholic mood)
+  genre=folk | mood=melancholic | energy=0.95
+==============================================================
+
+  #1  Hollow River  -  June Ashford
+       Genre: folk  |  Mood: melancholic  |  Energy: 0.30
+       Score: 3.35 / 4.00
+       Why:   genre match (folk, +2.0); mood match (melancholic, +1.0); energy proximity +0.35 (target 0.95, song 0.30)
+
+  #2  Pulse at Dawn  -  Echosphere
+       Genre: edm  |  Mood: euphoric  |  Energy: 0.95
+       Score: 1.00 / 4.00
+       Why:   energy proximity +1.00 (target 0.95, song 0.95)
+
+  #3  Gym Hero  -  Max Pulse
+       Genre: pop  |  Mood: intense  |  Energy: 0.93
+       Score: 0.98 / 4.00
+       Why:   energy proximity +0.98 (target 0.95, song 0.93)
+
+  #4  Shatter the Grid  -  Iron Veil
+       Genre: metal  |  Mood: angry  |  Energy: 0.97
+       Score: 0.98 / 4.00
+       Why:   energy proximity +0.98 (target 0.95, song 0.97)
+
+  #5  Storm Runner  -  Voltline
+       Genre: rock  |  Mood: intense  |  Energy: 0.91
+       Score: 0.96 / 4.00
+       Why:   energy proximity +0.96 (target 0.95, song 0.91)
+
+==============================================================
+```
+
+### Adversarial Profile 2 — Ghost genre (k-pop not in catalog)
+
+```
+==============================================================
+  PROFILE: ADVERSARIAL: Ghost genre (k-pop - not in catalog)
+  genre=k-pop | mood=happy | energy=0.78
+==============================================================
 
   #1  Rooftop Lights  -  Indigo Parade
        Genre: indie pop  |  Mood: happy  |  Energy: 0.76
-       Score: 3.99 / 4.00
-       Why:   genre match (indie pop, +2.0); mood match (happy, +1.0); energy proximity +0.99 (target 0.75, song 0.76)
+       Score: 1.98 / 4.00
+       Why:   mood match (happy, +1.0); energy proximity +0.98 (target 0.78, song 0.76)
 
   #2  Sunrise City  -  Neon Echo
        Genre: pop  |  Mood: happy  |  Energy: 0.82
-       Score: 1.93 / 4.00
-       Why:   mood match (happy, +1.0); energy proximity +0.93 (target 0.75, song 0.82)
+       Score: 1.96 / 4.00
+       Why:   mood match (happy, +1.0); energy proximity +0.96 (target 0.78, song 0.82)
 
   #3  Night Drive Loop  -  Neon Echo
        Genre: synthwave  |  Mood: moody  |  Energy: 0.75
-       Score: 1.00 / 4.00
-       Why:   energy proximity +1.00 (target 0.75, song 0.75)
+       Score: 0.97 / 4.00
+       Why:   energy proximity +0.97 (target 0.78, song 0.75)
 
   #4  Street Lights Fade  -  Marcus Cole
        Genre: hip-hop  |  Mood: confident  |  Energy: 0.72
-       Score: 0.97 / 4.00
-       Why:   energy proximity +0.97 (target 0.75, song 0.72)
+       Score: 0.94 / 4.00
+       Why:   energy proximity +0.94 (target 0.78, song 0.72)
 
-  #5  Sunshine Riddim  -  Coastal Roots
-       Genre: reggae  |  Mood: uplifting  |  Energy: 0.64
-       Score: 0.89 / 4.00
-       Why:   energy proximity +0.89 (target 0.75, song 0.64)
+  #5  Storm Runner  -  Voltline
+       Genre: rock  |  Mood: intense  |  Energy: 0.91
+       Score: 0.87 / 4.00
+       Why:   energy proximity +0.87 (target 0.78, song 0.91)
 
-========================================================
+==============================================================
+```
+
+### Adversarial Profile 3 — Contradictory vibe (ambient genre + intense mood + very low energy)
+
+```
+==============================================================
+  PROFILE: ADVERSARIAL: Contradictory vibe (ambient + intense mood)
+  genre=ambient | mood=intense | energy=0.15
+==============================================================
+
+  #1  Spacewalk Thoughts  -  Orbit Bloom
+       Genre: ambient  |  Mood: chill  |  Energy: 0.28
+       Score: 2.87 / 4.00
+       Why:   genre match (ambient, +2.0); energy proximity +0.87 (target 0.15, song 0.28)
+
+  #2  Storm Runner  -  Voltline
+       Genre: rock  |  Mood: intense  |  Energy: 0.91
+       Score: 1.24 / 4.00
+       Why:   mood match (intense, +1.0); energy proximity +0.24 (target 0.15, song 0.91)
+
+  #3  Gym Hero  -  Max Pulse
+       Genre: pop  |  Mood: intense  |  Energy: 0.93
+       Score: 1.22 / 4.00
+       Why:   mood match (intense, +1.0); energy proximity +0.22 (target 0.15, song 0.93)
+
+  #4  Morning Sonata  -  Clara Voss
+       Genre: classical  |  Mood: peaceful  |  Energy: 0.22
+       Score: 0.93 / 4.00
+       Why:   energy proximity +0.93 (target 0.15, song 0.22)
+
+  #5  Hollow River  -  June Ashford
+       Genre: folk  |  Mood: melancholic  |  Energy: 0.30
+       Score: 0.85 / 4.00
+       Why:   energy proximity +0.85 (target 0.15, song 0.30)
+
+==============================================================
 ```
 
 ---
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
+### What the adversarial profiles revealed
 
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+**Conflict profile (folk/melancholic/energy=0.95):** The genre+mood combo locked in Hollow River at #1 (score 3.35) even though its energy (0.30) is the furthest possible from the target (0.95). The categorical match earned 3.0 points; the energy mismatch only subtracted 0.65. This confirms the bias noted in the algorithm recipe: genre dominates so heavily that it can surface a nearly wrong-energy song over a perfect-energy one from a different genre. Spots #2–5 are all high-energy songs with zero categorical match — purely sorted by energy proximity.
+
+**Ghost genre (k-pop):** With zero genre bonuses available, the entire top-5 was decided by mood and energy alone. The system degraded gracefully — it still returned five reasonable results rather than erroring. Max score dropped from ~4.0 to ~2.0, exposing that most of the recommender's confidence comes from genre match.
+
+**Contradictory vibe (ambient/intense/energy=0.15):** The system was split between two incompatible signals. Spacewalk Thoughts won on genre alone (2.87) even though its mood is chill, not intense. Storm Runner and Gym Hero came second and third purely on mood match, scoring 1.24 and 1.22 — but with energy penalties near 0.75 each because their energy (0.91–0.93) is the opposite of the 0.15 target. No song in the catalog satisfies all three constraints simultaneously, which is what this profile was designed to expose.
 
 ---
 

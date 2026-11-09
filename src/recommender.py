@@ -84,28 +84,28 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     """
     Scores a single song against user preferences.
 
-    Scoring recipe (AI-assisted design, "Scoring Logic Design" session):
-      +2.0  genre match  — genre is the strongest taste signal
-      +1.0  mood match   — mood refines the vibe within a genre
-      0–1.0 energy sim   — 1 - |song.energy - target_energy|, continuous proximity
-    Max possible score: 4.0
+    EXPERIMENT — Weight Shift:
+      +1.0  genre match  — halved from 2.0 (genre is now a soft signal)
+      +1.0  mood match   — unchanged
+      0–2.0 energy sim   — doubled: (1 - |song.energy - target_energy|) * 2.0
+    Max possible score: 4.0  (math check: 1.0 + 1.0 + 2.0 = 4.0, same as baseline)
     """
     score = 0.0
     reasons = []
 
     if song["genre"] == user_prefs.get("genre"):
-        score += 2.0
-        reasons.append(f"genre match ({song['genre']}, +2.0)")
+        score += 1.0
+        reasons.append(f"genre match ({song['genre']}, +1.0)")
 
     if song["mood"] == user_prefs.get("mood"):
         score += 1.0
         reasons.append(f"mood match ({song['mood']}, +1.0)")
 
-    energy_sim = 1.0 - abs(song["energy"] - user_prefs.get("target_energy", 0.5))
+    energy_sim = (1.0 - abs(song["energy"] - user_prefs.get("target_energy", 0.5))) * 2.0
     score += energy_sim
     reasons.append(
         f"energy proximity +{energy_sim:.2f} "
-        f"(target {user_prefs.get('target_energy', 0.5):.2f}, song {song['energy']:.2f})"
+        f"(target {user_prefs.get('target_energy', 0.5):.2f}, song {song['energy']:.2f}, weight x2)"
     )
 
     return score, reasons
