@@ -21,16 +21,15 @@ Prompts:
 
 ## 3. How the Model Works  
 
-Explain your scoring approach in simple language.  
+Imagine a judge at a talent show who has been given a scorecard with three criteria. For every song in the catalog, the judge checks three things and assigns points.
 
-Prompts:  
+First, does the song belong to the genre the user said they like? If yes, it gets 2 points — the biggest reward, because genre is the most reliable signal of someone's taste. If no, it gets nothing for that category.
 
-- What features of each song are used (genre, energy, mood, etc.)  
-- What user preferences are considered  
-- How does the model turn those into a score  
-- What changes did you make from the starter logic  
+Second, does the song match the mood the user is looking for right now? A match earns 1 point. Mood matters, but it is worth less than genre because the same person might want happy music one day and chill music the next — it depends on the moment.
 
-Avoid code here. Pretend you are explaining the idea to a friend who does not program.
+Third, how close is the song's energy level to what the user wants? Energy is measured on a scale from 0 (completely calm) to 1 (maximum intensity). The system calculates the gap between the song's energy and the user's target, then subtracts that gap from 1.0. A perfect match gives a full extra point; a song that is very far away gives almost nothing. This means no song ever scores zero on energy — every song contributes something to the total.
+
+Once all three numbers are added up, every song has a score out of 4. The system then sorts all 18 songs from highest to lowest score and returns the top 5. Alongside each recommendation, it prints a plain-English explanation of exactly which rules fired and by how much — so the user always knows *why* a song was chosen, not just *that* it was chosen.
 
 ---
 
